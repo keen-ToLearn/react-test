@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 //import { Media } from 'reactstrap';
-import {Card, CardImg, CardImgOverlay, CardBody, CardText, CardTitle} from 'reactstrap';
+import {Card, CardImg, CardImgOverlay, CardTitle} from 'reactstrap';
+import DishDetail from './DishdetailComponent';
+//import {CardBody, CardText} from 'reactstrap';
 //'CARD' REACTSTRAP COMPONENT WOULD NOW BE USED TO DETERMINE THE LAYOUT INSTEAD OF THE 'MEDIA' REACTSTRAP COMPONENT
 
 //creating a class component
@@ -12,6 +14,7 @@ class Menu extends Component{
         //adding data into component for use
         //defining a state for 'Menu' component
         //state stores properties related to component which may be used
+        console.log('Menu component constructor invoked');
         this.state = {
             selectedDish: null,
             //'dishes' property defined, a JS list object
@@ -56,26 +59,43 @@ class Menu extends Component{
             ]*/
         }
     }
+
+    componentDidMount(){
+        console.log('Menu component componentDidMount invoked');
+    }
+
     onDishSelect(dish){
         this.setState({selectedDish: dish});
     }
 
 //to render the dish that was selected
+
+//    renderDish(dish){
+//        if(dish != null){
+//            return(
+//                {/*
+//                <Card>
+//                    <CardImg width="100%" src={dish.image} alt={dish.name}/>
+//                    <CardBody>
+//                        <CardTitle>{dish.name}</CardTitle>
+//                        <CardText>{dish.description}</CardText>
+//                    </CardBody>
+//                </Card>
+//                */}
+//            );
+//        }
+//        else{
+//            return({/*<div></div>*/});
+//        }
+//    }
+
     renderDish(dish){
-        if(dish != null){
+        if(dish != null)
             return(
-                <Card>
-                    <CardImg width="100%" src={dish.image} alt={dish.name}/>
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+                <DishDetail selectedDish={dish}/>
             );
-        }
-        else{
+        else
             return(<div></div>);
-        }
     }
 
 //render method that must be implemented for every component
@@ -120,6 +140,7 @@ class Menu extends Component{
                 </div>
             );
         });
+        console.log('Menu component render invoked');
         return(
             <div className="container">
                 <div className="row">
@@ -127,11 +148,15 @@ class Menu extends Component{
                         {menu}
                     {/*</Media>*/}
                 </div>
+                {/*
                 <div className="row">
                     <div className="col-12 m-1">
                         {this.renderDish(this.state.selectedDish)}
                     </div>
                 </div>
+                */}
+                {/*<comment>renderDish method needs to be implemented differently for assignment 1</comment>*/}
+                {this.renderDish(this.state.selectedDish)}
             </div>
         );
     }

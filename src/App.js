@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 //above import is not required if we are not defining 'App' as a component
 import {Navbar, NavbarBrand} from 'reactstrap';
 import Menu from './components/MenuComponents';
-import './App.css';
+//import './App.css';
 import {DISHES} from './shared/dishes';
 
 
