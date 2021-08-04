@@ -6,9 +6,12 @@ class DishDetail extends Component{
     constructor(props){
         super(props);
 
-        this.state = {
-            dishinfo: this.props.selectedDish
-        }
+        // this.state = {
+        //     dishinfo: this.props.selectedDish
+        // }
+        //commenting out state as props can be directly used
+        //no state makes this component stateless and presentational
+        console.log(this.props.selectedDish);
     }
     renderDish(info){
         if(info != null){
@@ -52,14 +55,16 @@ class DishDetail extends Component{
     }
 
     render(){
-        console.log(this.state.dishinfo);
+        console.log(this.props.selectedDish);
         return(
-            <div className="row">
-                <div className="col-12 col-md-5 m-1">
-                    {this.renderDish(this.state.dishinfo)}
-                </div>
-                <div className="col-md-5 col-12 m-1">
-                        {this.renderComments(this.state.dishinfo)}
+            <div className="container">
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                        {this.renderDish(this.props.selectedDish)}
+                    </div>
+                    <div className="col-md-5 col-12 m-1">
+                            {this.renderComments(this.props.selectedDish)}
+                    </div>
                 </div>
             </div>
         );

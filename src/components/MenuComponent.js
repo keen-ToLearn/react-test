@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 //import { Media } from 'reactstrap';
 import {Card, CardImg, CardImgOverlay, CardTitle} from 'reactstrap';
-import DishDetail from './DishdetailComponent';
 //import {CardBody, CardText} from 'reactstrap';
 //'CARD' REACTSTRAP COMPONENT WOULD NOW BE USED TO DETERMINE THE LAYOUT INSTEAD OF THE 'MEDIA' REACTSTRAP COMPONENT
 
@@ -15,57 +14,10 @@ class Menu extends Component{
         //defining a state for 'Menu' component
         //state stores properties related to component which may be used
         console.log('Menu component constructor invoked');
-        this.state = {
-            selectedDish: null,
-            //'dishes' property defined, a JS list object
-            /*commenting out 'dishes' state property as now the parent class shall pass 'dishes' as props
-            dishes: [
-                {
-                    id: 0,
-                    name:'Uthappizza',
-                    image: 'assets/images/uthappizza.png',
-                    category: 'mains',
-                    label:'Hot',
-                    price:'4.99',
-                    description:'A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.'
-                },
-                {
-                    id: 1,
-                    name:'Zucchipakoda',
-                    image: 'assets/images/zucchipakoda.png',
-                    category: 'appetizer',
-                    label:'',
-                    price:'1.99',
-                    description:'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce'
-                },
-                {
-                    id: 2,
-                    name:'Vadonut',
-                    image: 'assets/images/vadonut.png',
-                    category: 'appetizer',
-                    label:'New',
-                    price:'1.99',
-                    description:'A quintessential ConFusion experience, is it a vada or is it a donut?'
-                },
-                {
-                    id: 3,
-                    name:'ElaiCheese Cake',
-                    image: 'assets/images/elaicheesecake.png',
-                    category: 'dessert',
-                    label:'',
-                    price:'2.99',
-                    description:'A delectable, semi-sweet New York Style Cheese Cake, with Graham cracker crust and spiced with Indian cardamoms'
-                }
-            ]*/
-        }
     }
 
     componentDidMount(){
         console.log('Menu component componentDidMount invoked');
-    }
-
-    onDishSelect(dish){
-        this.setState({selectedDish: dish});
     }
 
 //to render the dish that was selected
@@ -89,15 +41,6 @@ class Menu extends Component{
 //        }
 //    }
 
-    renderDish(dish){
-        if(dish != null)
-            return(
-                <DishDetail selectedDish={dish}/>
-            );
-        else
-            return(<div></div>);
-    }
-
 //render method that must be implemented for every component
     render(){
         //initialising 'menu'
@@ -114,7 +57,7 @@ class Menu extends Component{
                 //key helps identify different list objects, dish.id has been used as a key
                 <div key={dish.id} className="col-12 col-md-5 m-1">
                     {/*<comment>Clicking on card should load information about dish</comment>*/}
-                    <Card onClick={() => {this.onDishSelect(dish)}}>
+                    <Card onClick={() => this.props.onClick(dish.id)}>
                         <CardImg width="100%" src={dish.image} alt={dish.name}/>
                         <CardImgOverlay>
                             <CardTitle>{dish.name}</CardTitle>
@@ -154,9 +97,8 @@ class Menu extends Component{
                         {this.renderDish(this.state.selectedDish)}
                     </div>
                 </div>
+                <comment>renderDish method needs to be implemented differently for assignment 1</comment>
                 */}
-                {/*<comment>renderDish method needs to be implemented differently for assignment 1</comment>*/}
-                {this.renderDish(this.state.selectedDish)}
             </div>
         );
     }
