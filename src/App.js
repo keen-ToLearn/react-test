@@ -4,14 +4,17 @@ import React, {Component} from 'react';
 import Main from './components/MainComponent';
 //import './App.css';
 import './newApp.css';
+import {BrowserRouter} from 'react-router-dom';
 
 class App extends Component{
   render(){
     return(
-      <div className="App">
-        {/*<comment>App component simply using Main which handles everything</comment>*/}
-        <Main/>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          {/*<comment>App component simply using Main which handles everything</comment>*/}
+          <Main/>
+        </div>
+      </BrowserRouter>
     );
   }
 }
