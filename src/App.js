@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 //above import is not required if we are not defining 'App' as a class component
 import Main from './components/MainComponent';
 //import './App.css';
+import './newApp.css';
 
 class App extends Component{
   render(){

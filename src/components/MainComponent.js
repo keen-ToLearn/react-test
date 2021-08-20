@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
+//import { Navbar, NavbarBrand } from 'reactstrap';
+import Header from './HeaderComponent';
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
+import Footer from './FooterComponent';
 import {DISHES} from '../shared/dishes';
 
 //Making main component as container component
@@ -24,11 +26,13 @@ class Main extends Component{
     render(){
         return(
             <div className="App">
+                {/*<comment>Navbar moved to HeaderComponent</comment>
                 <Navbar dark color="primary">
                     <div className="container">
                         <NavbarBrand href="/">Ristorante Con Fusion</NavbarBrand>
                     </div>
-                </Navbar>
+                </Navbar>*/}
+                <Header/>
                 <Menu dishes={this.state.dishes} onClick={(dishID) => this.onDishSelect(dishID)}/>
                 {/*<comment>
                     select 1st element from the array returned by filter function which
@@ -36,6 +40,7 @@ class Main extends Component{
                     dish ID is equal to selectedDish
                 </comment>*/}
                 <DishDetail selectedDish={this.state.dishes.filter((dish) => (dish.id === this.state.selectedDish))[0]}/>
+                <Footer/>
             </div>
         );
     }
