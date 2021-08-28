@@ -4,7 +4,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Menu from './MenuComponent';
-//import DishDetail from './DishdetailComponent';
+import DishDetail from './DishdetailComponent';
 import Footer from './FooterComponent';
 import {DISHES} from '../shared/dishes';
 import {COMMENTS} from '../shared/comments';
@@ -37,6 +37,20 @@ class Main extends Component{
             );
         }
 
+        const DishWithId = ({match}) => {
+            return(
+                <div>
+                    {/*
+                        <comment>Number typecasting or parseInt function both are capable of converting string to int</comment>
+                        <DishDetail selectedDish={this.state.dishes.filter((dish) => dish.id === Number(match.params.dishId))[0]}/>
+                    */}
+                    <DishDetail selectedDish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+                    dishComments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                    />
+                </div>
+            );
+        }
+
         return(
             <div className="App">
                 <Header/>
@@ -49,6 +63,7 @@ class Main extends Component{
                         To pass props inline functional component or function has to be used, as per Route specification
                     </comment>*/}
                     <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes}/>}/>
+                    <Route path="/menu/:dishId" component={DishWithId}/>
                     <Route exact path="/contactus" component={Contact}/>
                     <Redirect to="/home"/>
                 </Switch>
