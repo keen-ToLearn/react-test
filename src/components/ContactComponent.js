@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col, FormFeedback } from 'reactstrap';
 import {Link} from 'react-router-dom';
 
 //Contact component has been converted into a class component from a functional component
@@ -14,11 +14,19 @@ class Contact extends Component{
             email: '',
             agree: false,
             contactType: 'Tel.',
-            message: ''
+            message: '',
+            //property 'touched' checks whether a field has been filled or not
+            touched: {
+                firstname: false,
+                lastname: false,
+                telnum: false,
+                email: false
+            }
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
     }
 
     //'event' is associated with Form elements like Input or Button
@@ -43,7 +51,51 @@ class Contact extends Component{
         event.preventDefault();
     }
 
+    //Form validation: to change state if field has been touched
+    //field: the field that has been modified
+    handleBlur = (field) => (event) => {
+        //Decoding the statement below
+        //...this.state.touched -> for all in this.state.touched
+        //only change [field] to true
+        this.setState({
+            touched: {...this.state.touched, [field]: true}
+        });
+    }
+
+    //function to validate information in Input fields
+    validate(firstname, lastname, telnum, email){
+        const errors = {
+            firstname: '',
+            lastname: '',
+            telnum: '',
+            email: ''
+        }
+
+        if(this.state.touched.firstname && firstname.length < 3)
+            errors.firstname = "First Name should be >= 3 characters";
+        else if(this.state.touched.firstname && firstname.length > 10)
+            errors.firstname = "First Name should be <= 10 characters";
+        
+        if(this.state.touched.lastname && lastname.length < 3)
+            errors.lastname = "Last Name should be >= 3 characters";
+        else if(this.state.touched.lastname && lastname.length > 10)
+            errors.lastname = "Last Name should be <= 10 characters";
+
+        //reg = /^\d+$/ implies all characters in string are numbers
+        const reg = /^\d+$/;
+        //test method for regular expressions, does search for 'reg' pattern in string & returns boolean value accordingly
+        if(this.state.touched.telnum && !reg.test(telnum))
+            errors.telnum = "Tel. No. should contain numbers only";
+        
+        if(this.state.touched.email && email.split('').filter((x) => x === '@').length !== 1)
+            errors.email = "Email should contain an '@' sign";
+        
+        return errors;
+    }
+
     render(){
+        //Best time to validate form is when it is re-rendered
+        const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
         return(
             <div className="container">
                 <div className="row">
@@ -104,28 +156,38 @@ class Contact extends Component{
                                 <Col md={10}>
                                     {/*<comment>Tying component state to the state of this Input form element: value={this.state.firstname}</comment>*/}
                                     <Input type="text" id="firstname" name="firstname" placeholder="First Name"
-                                    value={this.state.firstname} onChange={this.handleInputChange}/>
+                                    value={this.state.firstname} valid={errors.firstname === ''} invalid={errors.firstname !== ''}
+                                    onChange={this.handleInputChange} onBlur={this.handleBlur('firstname')}/>
+                                    {/*<comment>FormFeedback reactstrap component is used generally to display errors as a result of Form validation</comment>*/}
+                                    <FormFeedback>{errors.firstname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label htmlFor="lastname" md={2}>Last Name</Label>
                                 <Col md={10}>
+                                    {/*<comment>valid, invalid attribute determine if Input field is valid or not</comment>*/}
                                     <Input type="text" id="lastname" name="lastname" placeholder="Last Name"
-                                    value={this.state.lastname} onChange={this.handleInputChange}/>
+                                    value={this.state.lastname} valid={errors.lastname === ''} invalid={errors.lastname !== ''}
+                                    onChange={this.handleInputChange} onBlur={this.handleBlur('lastname')}/>
+                                    <FormFeedback>{errors.lastname}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label htmlFor="telnum" md={2}>Telephone No.</Label>
                                 <Col md={10}>
                                     <Input type="tel" id="telnum" name="telnum" placeholder="Telephone No."
-                                    value={this.state.telnum} onChange={this.handleInputChange}/>
+                                    value={this.state.telnum} valid={errors.telnum === ''} invalid={errors.telnum !== ''}
+                                    onChange={this.handleInputChange} onBlur={this.handleBlur('telnum')}/>
+                                    <FormFeedback>{errors.telnum}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label htmlFor="email" md={2}>Email</Label>
                                 <Col md={10}>
                                     <Input type="email" id="email" name="email" placeholder="Email"
-                                    value={this.state.email} onChange={this.handleInputChange}/>
+                                    value={this.state.email} valid={errors.email === ''} invalid={errors.email !== ''}
+                                    onChange={this.handleInputChange} onBlur={this.handleBlur('email')}/>
+                                    <FormFeedback>{errors.email}</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
