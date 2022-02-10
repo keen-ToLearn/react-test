@@ -1,3 +1,7 @@
+//implemented concept - 'Splitting Reducers, Combining Reducers'
+//new reducer functions to handle each element of Redux Store state - redux/dishes, redux/comments, redux/leaders, redux/promotions
+//THIS FILE 'reducer.js' IS NOT REQUIRED, refer Ln 1
+//below imports have been moved to individual reducer function files
 import {DISHES} from '../shared/dishes';
 import {COMMENTS} from '../shared/comments';
 import {LEADERS} from '../shared/leaders';
