@@ -20,6 +20,7 @@ import Footer from './FooterComponent';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 //MainComponent needs to connect to REDUX STORE to obtain the state from there
 import {connect} from 'react-redux';
+import {addComment} from '../redux/ActionCreators';
 
 //state refers to the REDUX STORE state
 //REDUX STORE state is mapped to props that would be used in this component
@@ -31,6 +32,14 @@ const mapStateToProps = state => {
         promotions : state.promotions
     }
 }
+
+//function below receives dispatch as parameter when the Main component connect() to REDUX STORE
+//REDUX STORE dispatch is mapped to props that would be used in this component
+const mapDispatchToProps = dispatch => ({
+    //'addComment' in dispatch(addComment(dishId, rating, author, comment)) makes a function call that returns action object
+    //dispatch() gets action object, it becomes usable as "addComment" in component
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 //Making main component as container component
 //Menu and DishDetail components would now act as presentational components
@@ -70,7 +79,12 @@ class Main extends Component{
                     */}
                     <DishDetail selectedDish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
                     dishComments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                    addComment={this.props.addComment}
                     />
+                    {/*
+                        <!--addComment prop is passed to DishDetail to access data entered by user,
+                        data entered would be added to REDUX STORE state-->
+                    */}
                 </div>
             );
         }
@@ -101,4 +115,4 @@ class Main extends Component{
 
 //syntax to connect REDUX STORE to MainComponent using connect()
 //withRouter is used since the react app uses Router for navigation
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-//import React, {Component} from 'react';
+//import React from 'react';
 import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import {Media, Button, Modal, ModalHeader, ModalBody, Label, FormGroup} from 'reactstrap';
 import {Link} from 'react-router-dom';
@@ -25,8 +25,14 @@ class CommentForm extends Component{
 
     handleSubmit(values){
         this.toggleModal();
-        console.log("Current state is: "+JSON.stringify(values));
-        alert("Current state is: "+JSON.stringify(values));
+        //updates after implementing REDUX ACTIONS
+        //not giving alert on submit
+        // console.log("Current state is: "+JSON.stringify(values));
+        // alert("Current state is: "+JSON.stringify(values));
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        //above statement triggers dispatch() with addComment() as parameter,
+        //refer MainComponent - dispatch(addComment(dishId, rating, author, comment))
+        //dispatch() will take action object returned by addComment() and trigger the reducer function - Comments
     }
 
     render(){
@@ -90,7 +96,7 @@ function RenderDish({infoDish}){
         return(<div></div>);
 }
 
-function RenderComments({commentsInfo}){
+function RenderComments({commentsInfo, addComment, dishId}){
     if(commentsInfo != null){
         const review = commentsInfo.map((comment) => {
             return(
@@ -110,7 +116,7 @@ function RenderComments({commentsInfo}){
                     <h4>Comments</h4>
                     {review}
                 </Media>
-                <CommentForm/>
+                <CommentForm dishId={dishId} addComment={addComment}/>
             </>
         );
     }
@@ -138,7 +144,8 @@ const DishDetail = (props) => {
                     <RenderDish infoDish={props.selectedDish}/>
                 </div>
                 <div className="col-md-5 col-12 m-1">
-                    <RenderComments commentsInfo={props.dishComments}/>
+                    <RenderComments commentsInfo={props.dishComments} addComment={props.addComment} dishId={props.selectedDish.id}/>
+                    {/*<!--dish.id is passed for addComment to create action object-->*/}
                 </div>
             </div>
         </div>
