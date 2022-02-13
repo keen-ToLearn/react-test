@@ -3,6 +3,7 @@ import React from 'react';
 import {Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 //import {CardBody, CardText} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import { Loading } from './LoadingComponent';
 
 //creating a functional component which is presentational in nature
 //Method 1 of passing props - directly specifying the objects passed through props
@@ -22,7 +23,9 @@ function RenderMenuItem({dish}){
 //Method 2 of passing props
 //using arrow function to implement 'Menu' functional component
 const Menu = (props) => {
-    const menu = props.dishes.map((dish) => {
+    //REDUX THUNK update - props.dishes changes to props.dishes.dishes
+    //due to change in shape of 'dishes' state; dishes: DISHES -> dishes: {isLoading, errMes, dishes}
+    const menu = props.dishes.dishes.map((dish) => {
         return(
             <div key={dish.id} className="col-12 col-md-5 m-1">
                 <RenderMenuItem dish={dish}/>
@@ -30,25 +33,44 @@ const Menu = (props) => {
         );
     });
 
-    return(
-        <div className="container">
-            <div className="row">
-                <Breadcrumb>
-                    <BreadcrumbItem>
-                        <Link to="/home">Home</Link>
-                    </BreadcrumbItem>
-                    <BreadcrumbItem active>Menu</BreadcrumbItem>
-                </Breadcrumb>
-                <div className="col-12">
-                    <h3>Menu</h3>
-                    <hr/>
+    if(props.dishes.isLoading){
+        return(
+            <div className="container">
+                <div className="row">
+                    <Loading/>
                 </div>
             </div>
-            <div className="row">
-                {menu}
+        );
+    }
+    else if(props.dishes.errMes){
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{props.dishes.errMes}</h4>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+    else
+        return(
+            <div className="container">
+                <div className="row">
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <Link to="/home">Home</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem active>Menu</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>Menu</h3>
+                        <hr/>
+                    </div>
+                </div>
+                <div className="row">
+                    {menu}
+                </div>
+            </div>
+        );
 }
 
 //creating a class component

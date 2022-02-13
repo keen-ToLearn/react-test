@@ -1,6 +1,9 @@
 //createStore is a function used to create a REDUX STORE
 //combineReducers is a function used to combine multiple simple reducers
-import { createStore, combineReducers } from "redux";
+//REDUX THUNK and REDUX MIDDLEWARE to be applied here
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 //below import is not required due to implementation of - 'Splitting Reducers, Combining Reducers'
 //reducer.js is not going to be used
@@ -28,7 +31,9 @@ export const ConfigureStore = () => {
             comments : Comments,
             promotions : Promotions,
             leaders : Leaders
-        })
+        }),
+        applyMiddleware(thunk, logger)
+        //applyMiddleware returns store enhancers
     );
 
     return store;
