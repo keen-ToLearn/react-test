@@ -22,6 +22,8 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 //import Action Creators and REDUX THUNK
 import {addComment, fetchDishes} from '../redux/ActionCreators';
+//import default actions provided by react-redux-form
+import {actions} from 'react-redux-form';
 
 //state refers to the REDUX STORE state
 //REDUX STORE state is mapped to props that would be used in this component
@@ -43,7 +45,8 @@ const mapDispatchToProps = dispatch => ({
     //'addComment' in dispatch(addComment(dishId, rating, author, comment)) makes a function call that returns action object
     //dispatch() gets action object, it becomes usable as "addComment" in component
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-    fetchDishes: () => { dispatch(fetchDishes()) }
+    fetchDishes: () => { dispatch(fetchDishes()) },
+    resetFeedbackForm: () => dispatch(actions.reset('feedback'))
 });
 
 //Making main component as container component
@@ -128,7 +131,11 @@ class Main extends Component{
                     </comment>*/}
                     <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes}/>}/>
                     <Route path="/menu/:dishId" component={DishWithId}/>
+                    {/*
+                    <!--post REDUX THUNK update - Contact component will receive props; below Route invalid-->
                     <Route exact path="/contactus" component={Contact}/>
+                    */}
+                    <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
                     <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>}/>
                     <Redirect to="/home"/>
                 </Switch>

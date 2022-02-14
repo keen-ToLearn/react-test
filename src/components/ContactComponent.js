@@ -5,7 +5,9 @@ import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from 'reactstrap'
 //below components from reactstrap won't be used
 // import { Form, FormGroup, Input, FormFeedback } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+//using Form instead of LocalForm
+import { Control, Form, Errors, actions } from 'react-redux-form';
+//import { Control, LocalForm, Errors } from 'react-redux-form';
 
 //val && val.length - val exists, has a value && val.length is not 0 = true;
 //val exists, val.length is 0 = false
@@ -80,6 +82,8 @@ class Contact extends Component{
         //event.preventDefault();
         console.log("Current state is: " + JSON.stringify(values));
         alert("Current state is: " + JSON.stringify(values));
+        //post REDUX THUNK update - below statement resets feedback form onSubmit()
+        this.props.resetFeedbackForm();
     }
     //use of REDUX FORM - LocalForm necessitates changes to handleSubmit event handler as below:
     //change event -> values,   this.state -> values
@@ -187,8 +191,12 @@ class Contact extends Component{
                             Form -> LocalForm i.e. <Form onSubmit={this.handleSubmit}> -> <LocalForm> ...
                             onSubmit={this.handleSubmit} -> onSubmit={(values) => this.handleSubmit(values)}
                             'values' is an object of field data provided by the REDUX LocalForm-->
+
+                            <!--post REDUX THUNK update
+                            LoaclForm -> Form(imported from react-redux-form and not reactstrap)
+                            model="feedback" links Form to actions.reset('feedback'), refer Main component-->
                         */}
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                        <Form model="feedback" onSubmit={(values) => this.handleSubmit(values)}>
                             {/*
                             <comment>A 'FormGroup row' refers to one row of a form</comment>
                             <comment>'FormGroup row' implements bootstrap grid, FormGroup elements can have classes to specify layout</comment>
@@ -362,7 +370,7 @@ class Contact extends Component{
                                     <Button type="submit" color="primary">Send Feedback</Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>

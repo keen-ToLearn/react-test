@@ -5,6 +5,10 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
+//manages connection between form state and REDUX STORE state, creates 'reducer functions' for the purpose
+import { createForms } from 'react-redux-form';
+import { InitialFeedback } from './forms';
+
 //below import is not required due to implementation of - 'Splitting Reducers, Combining Reducers'
 //reducer.js is not going to be used
 //import { Reducer, initialState } from "./reducer";
@@ -30,7 +34,10 @@ export const ConfigureStore = () => {
             dishes : Dishes,
             comments : Comments,
             promotions : Promotions,
-            leaders : Leaders
+            leaders : Leaders,
+            ...createForms({
+                feedback: InitialFeedback
+            })
         }),
         applyMiddleware(thunk, logger)
         //applyMiddleware returns store enhancers
