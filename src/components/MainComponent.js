@@ -21,7 +21,7 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 //MainComponent needs to connect to REDUX STORE to obtain the state from there
 import {connect} from 'react-redux';
 //import Action Creators and REDUX THUNK
-import {addComment, fetchDishes} from '../redux/ActionCreators';
+import {addComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
 //import default actions provided by react-redux-form
 import {actions} from 'react-redux-form';
 
@@ -46,7 +46,9 @@ const mapDispatchToProps = dispatch => ({
     //dispatch() gets action object, it becomes usable as "addComment" in component
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
     fetchDishes: () => { dispatch(fetchDishes()) },
-    resetFeedbackForm: () => dispatch(actions.reset('feedback'))
+    resetFeedbackForm: () => dispatch(actions.reset('feedback')),
+    fetchComments: () => { dispatch(fetchComments()) },
+    fetchPromos: () => { dispatch(fetchPromos()) }
 });
 
 //Making main component as container component
@@ -67,6 +69,8 @@ class Main extends Component{
 
     componentDidMount(){
         this.props.fetchDishes();
+        this.props.fetchComments();
+        this.props.fetchPromos();
     }
 
     render(){
@@ -84,9 +88,17 @@ class Main extends Component{
                         dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
                         dishesLoading={this.props.dishes.isLoading}
                         dishesErrMes={this.props.dishes.errMes}
-                        promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
+                        promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
+                        promosLoading={this.props.promotions.isLoading}
+                        promosErrMes={this.props.promotions.errMes}
                         leader={this.props.leaders.filter((leader) => leader.featured)[0]}
                     />
+                    {/*<!--
+                        fetch update: promotion = {this.props.promotions.filter....} -> {this.props.promotions.promotions.filter....},
+                        due to change in shape of 'promotions' state
+
+                        added promosLoading={this.props.promotions.isLoading} and promosErrMes={this.props.promotions.errMes}
+                    -->*/}
                 </>
             );
         }
@@ -106,7 +118,8 @@ class Main extends Component{
                     <DishDetail selectedDish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
                     isLoading={this.props.dishes.isLoading}
                     errMes={this.props.dishes.errMes}
-                    dishComments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                    dishComments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                    commentsErrMes={this.props.comments.errMes}
                     addComment={this.props.addComment}
                     />
                     {/*

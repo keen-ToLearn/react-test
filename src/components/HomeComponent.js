@@ -2,6 +2,8 @@
 import React from 'react';
 import {Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle} from 'reactstrap';
 import {Loading} from './LoadingComponent';
+//fetch update: importing baseURL to fetch images from server
+import { baseURL } from '../shared/baseURL';
 
 //RenderCard is going to be used only here hence, no separate component
 //REDUX THUNK update - add isLoading, errMes props
@@ -19,7 +21,7 @@ function RenderCard({item, isLoading, errMes}){
     else
         return(
             <Card>
-                <CardImg src={item.image} alt={item.name}/>
+                <CardImg src={baseURL + item.image} alt={item.name}/>
                 <CardBody>
                     <CardTitle>{item.name}</CardTitle>
                     {item.designation ?
@@ -38,7 +40,7 @@ function Home(props){
                     <RenderCard item={props.dish} isLoading={props.dishesLoading} errMes={props.dishesErrMes}/>
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.promotion}/>
+                    <RenderCard item={props.promotion} isLoading={props.promosLoading} errMes={props.promosErrMes}/>
                 </div>
                 <div className="col-12 col-md m-1">
                     <RenderCard item={props.leader}/>

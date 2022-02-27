@@ -4,6 +4,8 @@ import {Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem} fr
 //import {CardBody, CardText} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+//fetch update: importing baseURL to fetch images from server
+import { baseURL } from '../shared/baseURL';
 
 //creating a functional component which is presentational in nature
 //Method 1 of passing props - directly specifying the objects passed through props
@@ -11,7 +13,8 @@ function RenderMenuItem({dish}){
     return(
         <Card>
             <Link to={`/menu/${dish.id}`}>
-                <CardImg width="100%" src={dish.image} alt={dish.name}/>
+                {/*<!--fetch update: src changes from {dish.image} to {baseURL + dish.image}-->*/}
+                <CardImg width="100%" src={baseURL + dish.image} alt={dish.name}/>
                 <CardImgOverlay>
                     <CardTitle>{dish.name}</CardTitle>
                 </CardImgOverlay>

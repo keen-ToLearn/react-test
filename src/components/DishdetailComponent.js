@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import {LocalForm, Control, Errors} from 'react-redux-form';
 //REDUX THUNK update - show page loading
 import { Loading } from './LoadingComponent';
+//fetch update: importing baseURL to fetch images from server
+import { baseURL } from '../shared/baseURL';
 
 const maxLength = len => val => !val || (val.length <= len);
 const minLength = len => val => val && (val.length >= len);
@@ -86,7 +88,7 @@ function RenderDish({infoDish}){
     if(infoDish != null){
         return(
             <Card>
-                <CardImg width="100%" src={infoDish.image} alt={infoDish.name}/>
+                <CardImg width="100%" src={baseURL + infoDish.image} alt={infoDish.name}/>
                 <CardBody>
                     <CardTitle>{infoDish.name}</CardTitle>
                     <CardText>{infoDish.description}</CardText>
