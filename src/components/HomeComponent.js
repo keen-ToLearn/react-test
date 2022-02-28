@@ -4,6 +4,7 @@ import {Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle} from 'reacts
 import {Loading} from './LoadingComponent';
 //fetch update: importing baseURL to fetch images from server
 import { baseURL } from '../shared/baseURL';
+import { FadeTransform } from 'react-animation-components';
 
 //RenderCard is going to be used only here hence, no separate component
 //REDUX THUNK update - add isLoading, errMes props
@@ -20,15 +21,19 @@ function RenderCard({item, isLoading, errMes}){
     }
     else
         return(
-            <Card>
-                <CardImg src={baseURL + item.image} alt={item.name}/>
-                <CardBody>
-                    <CardTitle>{item.name}</CardTitle>
-                    {item.designation ?
-                    <CardSubtitle>{item.designation}</CardSubtitle> : null}
-                    <CardText>{item.description}</CardText>
-                </CardBody>
-            </Card>
+            <FadeTransform in transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>
+                <Card>
+                    <CardImg src={baseURL + item.image} alt={item.name}/>
+                    <CardBody>
+                        <CardTitle>{item.name}</CardTitle>
+                        {item.designation ?
+                        <CardSubtitle>{item.designation}</CardSubtitle> : null}
+                        <CardText>{item.description}</CardText>
+                    </CardBody>
+                </Card>
+            </FadeTransform>
         );
 }
 

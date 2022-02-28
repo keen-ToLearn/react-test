@@ -8,6 +8,7 @@ import {LocalForm, Control, Errors} from 'react-redux-form';
 import { Loading } from './LoadingComponent';
 //fetch update: importing baseURL to fetch images from server
 import { baseURL } from '../shared/baseURL';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 const maxLength = len => val => !val || (val.length <= len);
 const minLength = len => val => val && (val.length >= len);
@@ -91,13 +92,17 @@ class CommentForm extends Component{
 function RenderDish({infoDish}){
     if(infoDish != null){
         return(
-            <Card>
-                <CardImg width="100%" src={baseURL + infoDish.image} alt={infoDish.name}/>
-                <CardBody>
-                    <CardTitle>{infoDish.name}</CardTitle>
-                    <CardText>{infoDish.description}</CardText>
-                </CardBody>
-            </Card>
+            <FadeTransform in transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>
+                <Card>
+                    <CardImg width="100%" src={baseURL + infoDish.image} alt={infoDish.name}/>
+                    <CardBody>
+                        <CardTitle>{infoDish.name}</CardTitle>
+                        <CardText>{infoDish.description}</CardText>
+                    </CardBody>
+                </Card>
+            </FadeTransform>
         );
     }
     else
@@ -109,21 +114,25 @@ function RenderComments({commentsInfo, postComment, dishId}){
     if(commentsInfo != null){
         const review = commentsInfo.map((comment) => {
             return(
-                <div key={comment.id}>
-                    <Media tag="li">
-                        <Media body>
-                            <p>{comment.comment}</p>
-                            <p>--{comment.author}, {comment.date.slice(0,10)}</p>
+                <Fade in>
+                    <div key={comment.id}>
+                        <Media tag="li">
+                            <Media body>
+                                <p>{comment.comment}</p>
+                                <p>--{comment.author}, {comment.date.slice(0,10)}</p>
+                            </Media>
                         </Media>
-                    </Media>
-                </div>
+                    </div>
+                </Fade>
             );
         });
         return(
             <>
                 <Media list className="list-unstyled">
                     <h4>Comments</h4>
-                    {review}
+                    <Stagger in>
+                        {review}
+                    </Stagger>
                 </Media>
                 <CommentForm dishId={dishId} postComment={postComment}/>
             </>

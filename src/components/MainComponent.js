@@ -26,6 +26,7 @@ import {connect} from 'react-redux';
 import {postComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
 //import default actions provided by react-redux-form
 import {actions} from 'react-redux-form';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 //state refers to the REDUX STORE state
 //REDUX STORE state is mapped to props that would be used in this component
@@ -139,24 +140,28 @@ class Main extends Component{
         return(
             <div className="App">
                 <Header/>
-                {/*<comment>Switch groups all the Routes accessible from Main component</comment>*/}
-                <Switch>
-                    <Route path="/home" component={HomePage}/>
-                    {/*<comment>A component that does not take props & gets rendered from a route, then it can be written as below</comment>
-                    <Route exact path="/menu" component={Menu}/>
-                    <comment>
-                        To pass props inline functional component or function has to be used, as per Route specification
-                    </comment>*/}
-                    <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes}/>}/>
-                    <Route path="/menu/:dishId" component={DishWithId}/>
-                    {/*
-                    <!--post REDUX THUNK update - Contact component will receive props; below Route invalid-->
-                    <Route exact path="/contactus" component={Contact}/>
-                    */}
-                    <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
-                    <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>}/>
-                    <Redirect to="/home"/>
-                </Switch>
+                <TransitionGroup>
+                    <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+                        {/*<comment>Switch groups all the Routes accessible from Main component</comment>*/}
+                        <Switch>
+                            <Route path="/home" component={HomePage}/>
+                            {/*<comment>A component that does not take props & gets rendered from a route, then it can be written as below</comment>
+                            <Route exact path="/menu" component={Menu}/>
+                            <comment>
+                                To pass props inline functional component or function has to be used, as per Route specification
+                            </comment>*/}
+                            <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes}/>}/>
+                            <Route path="/menu/:dishId" component={DishWithId}/>
+                            {/*
+                            <!--post REDUX THUNK update - Contact component will receive props; below Route invalid-->
+                            <Route exact path="/contactus" component={Contact}/>
+                            */}
+                            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
+                            <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>}/>
+                            <Redirect to="/home"/>
+                        </Switch>
+                    </CSSTransition>
+                </TransitionGroup>
                 <Footer/>
             </div>
         );
