@@ -5,15 +5,65 @@ import * as ActionTypes from './ActionTypes';
 //below import for server address details
 import { baseURL } from '../shared/baseURL';
 
-//addComment is an 'action creator', it takes parameters to create and return action
-export const addComment = (dishId, rating, author, comment) => ({
-    type: ActionTypes.ADD_COMMENT,
-    payload: {
+//postComment is a REDUX THUNK
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+    const newComment = {
         dishId: dishId,
         rating: rating,
         author: author,
         comment: comment
     }
+    //creating newComment object to be posted into the server
+    //newComment.id would be included by server
+    newComment.date = new Date().toISOString();
+
+    return fetch(baseURL + 'comments', {
+        method: 'POST',
+        body: JSON.stringify(newComment),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if(response.ok){
+            return response;
+        }
+        else{
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmes = new Error(error.message);
+        throw errmes;
+    })
+    .then(response => response.json())
+    .then(response => dispatch(addComment(response)))
+    .catch(error => {
+        console.log('Post comments', error.message);
+        alert('Your comment could not be posted\nError: '+ error.message);
+    });
+}
+
+//addComment is an 'action creator', it takes parameters to create and return action
+//fetch POST update:
+//change in parameter list to addComment Action Creator, (dishId, rating, author, comment) -> (comment)
+//change in payload to payload: comment
+// export const addComment = (dishId, rating, author, comment) => ({
+//     type: ActionTypes.ADD_COMMENT,
+//     payload: {
+//         dishId: dishId,
+//         rating: rating,
+//         author: author,
+//         comment: comment
+//     }
+// });
+
+export const addComment = (comment) => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
 });
 
 //fetchDishes is a REDUX THUNK, returns a function
@@ -30,8 +80,24 @@ export const fetchDishes = () => (dispatch) => {
     //fetch update: replacing setTimeout() with actual call to server using fetch
 
     return fetch(baseURL + 'dishes')
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+            else{
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmes = new Error(error.message);
+            throw errmes;
+        })
         .then(response => response.json())
-        .then(dishes => dispatch(addDishes(dishes)));   //response.json() is available as dishes in then() method
+        .then(dishes => dispatch(addDishes(dishes)))   //response.json() is available as dishes in then() method
+        .catch(error => dispatch(dishesFailed(error.message)));
+        //handling error if it occurs while 'fetch'ing from server
 }
 
 //dishesLoading, dishesFailed, addDishes are plain Action Creators like addComment
@@ -51,8 +117,23 @@ export const addDishes = (dishes) => ({
 
 export const fetchComments = () => (dispatch) => {
     return fetch(baseURL + 'comments')
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+            else{
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmes = new Error(error.message);
+            throw errmes;
+        })
         .then(response => response.json())
-        .then(comments => dispatch(addComments(comments)));
+        .then(comments => dispatch(addComments(comments)))
+        .catch(error => dispatch(commentsFailed(error.message)));
 }
 
 export const commentsFailed = (errmes) => ({
@@ -69,8 +150,23 @@ export const fetchPromos = () => (dispatch) => {
     dispatch(promosLoading(true));
 
     return fetch(baseURL + 'promotions')
+        .then(response => {
+            if(response.ok){
+                return response;
+            }
+            else{
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => {
+            var errmes = new Error(error.message);
+            throw errmes;
+        })
         .then(response => response.json())
-        .then(promos => dispatch(addPromos(promos)));
+        .then(promos => dispatch(addPromos(promos)))
+        .catch(error => dispatch(promosFailed(error.message)));
 }
 
 export const promosLoading = () => ({

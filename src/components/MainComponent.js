@@ -21,7 +21,9 @@ import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 //MainComponent needs to connect to REDUX STORE to obtain the state from there
 import {connect} from 'react-redux';
 //import Action Creators and REDUX THUNK
-import {addComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
+//fetch POST update: change addComment to postComment
+//import {addComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
+import {postComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
 //import default actions provided by react-redux-form
 import {actions} from 'react-redux-form';
 
@@ -44,7 +46,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     //'addComment' in dispatch(addComment(dishId, rating, author, comment)) makes a function call that returns action object
     //dispatch() gets action object, it becomes usable as "addComment" in component
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    //fetch POST update: addComment replaced by postComment
+    //addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
     fetchDishes: () => { dispatch(fetchDishes()) },
     resetFeedbackForm: () => dispatch(actions.reset('feedback')),
     fetchComments: () => { dispatch(fetchComments()) },
@@ -120,12 +124,13 @@ class Main extends Component{
                     errMes={this.props.dishes.errMes}
                     dishComments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
                     commentsErrMes={this.props.comments.errMes}
-                    addComment={this.props.addComment}
+                    postComment={this.props.postComment}
                     />
-                    {/*
-                        <!--addComment prop is passed to DishDetail to access data entered by user,
-                        data entered would be added to REDUX STORE state-->
-                    */}
+                    {/*<!--addComment prop is passed to DishDetail to access data entered by user,
+                        data entered would be added to REDUX STORE state
+
+                        fetch POST update: addComment replaced by postComment THUNK
+                    -->*/}
                 </div>
             );
         }

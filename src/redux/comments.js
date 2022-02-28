@@ -16,8 +16,14 @@ export const Comments = (state = {
         case ActionTypes.ADD_COMMENT:
             //creating comment based on structure of comment object in shared/comments
             var comment = action.payload;
-            comment.id = state.comments.length; //fetch update: due to state modification, state.length -> state.comments.length
-            comment.date = new Date().toISOString();
+            //fetch POST update:
+            //comment.id would be supplied by server
+            //comment.date has been added in 'postComment' REDUX THUNK in './ActionCreators'
+            //
+            // //fetch update: due to state modification, state.length -> state.comments.length
+            // comment.id = state.comments.length;
+            // comment.date = new Date().toISOString();
+
             //achieved immutability of state using concat function that returns a new object, new object contains the new comment
             //return state.concat(comment);
             return {...state, comments: state.comments.concat(comment)}

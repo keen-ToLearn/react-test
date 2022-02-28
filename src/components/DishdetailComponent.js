@@ -33,7 +33,11 @@ class CommentForm extends Component{
         //not giving alert on submit
         // console.log("Current state is: "+JSON.stringify(values));
         // alert("Current state is: "+JSON.stringify(values));
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+
+        //fetch POST update: addComment replaced by postComment
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
+
+        //this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         //above statement triggers dispatch() with addComment() as parameter,
         //refer MainComponent - dispatch(addComment(dishId, rating, author, comment))
         //dispatch() will take action object returned by addComment() and trigger the reducer function - Comments
@@ -100,7 +104,8 @@ function RenderDish({infoDish}){
         return(<div></div>);
 }
 
-function RenderComments({commentsInfo, addComment, dishId}){
+//fetch POST update: addComment -> postComment
+function RenderComments({commentsInfo, postComment, dishId}){
     if(commentsInfo != null){
         const review = commentsInfo.map((comment) => {
             return(
@@ -120,7 +125,7 @@ function RenderComments({commentsInfo, addComment, dishId}){
                     <h4>Comments</h4>
                     {review}
                 </Media>
-                <CommentForm dishId={dishId} addComment={addComment}/>
+                <CommentForm dishId={dishId} postComment={postComment}/>
             </>
         );
     }
@@ -167,8 +172,11 @@ const DishDetail = (props) => {
                         <RenderDish infoDish={props.selectedDish}/>
                     </div>
                     <div className="col-md-5 col-12 m-1">
-                        <RenderComments commentsInfo={props.dishComments} addComment={props.addComment} dishId={props.selectedDish.id}/>
-                        {/*<!--dish.id is passed for addComment to create action object-->*/}
+                        <RenderComments commentsInfo={props.dishComments} postComment={props.postComment} dishId={props.selectedDish.id}/>
+                        {/*<!--
+                            dish.id is passed for addComment to create action object
+                            fetch POST update: addComment replaced by postComment
+                        -->*/}
                     </div>
                 </div>
             </div>
