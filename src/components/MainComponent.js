@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 //import Action Creators and REDUX THUNK
 //fetch POST update: change addComment to postComment
 //import {addComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
-import {postComment, fetchComments, fetchDishes, fetchPromos} from '../redux/ActionCreators';
+import {postComment, fetchComments, fetchDishes, fetchPromos, fetchLeaders, postFeedback} from '../redux/ActionCreators';
 //import default actions provided by react-redux-form
 import {actions} from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -53,7 +53,9 @@ const mapDispatchToProps = dispatch => ({
     fetchDishes: () => { dispatch(fetchDishes()) },
     resetFeedbackForm: () => dispatch(actions.reset('feedback')),
     fetchComments: () => { dispatch(fetchComments()) },
-    fetchPromos: () => { dispatch(fetchPromos()) }
+    fetchPromos: () => { dispatch(fetchPromos()) },
+    fetchLeaders: () => { dispatch(fetchLeaders()) },
+    postFeedback: (feedback) => dispatch(postFeedback(feedback))
 });
 
 //Making main component as container component
@@ -76,6 +78,7 @@ class Main extends Component{
         this.props.fetchDishes();
         this.props.fetchComments();
         this.props.fetchPromos();
+        this.props.fetchLeaders();
     }
 
     render(){
@@ -96,7 +99,9 @@ class Main extends Component{
                         promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
                         promosLoading={this.props.promotions.isLoading}
                         promosErrMes={this.props.promotions.errMes}
-                        leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+                        leader={this.props.leaders.leaders.filter((leader) => leader.featured)[0]}
+                        leadersLoading={this.props.leaders.isLoading}
+                        leadersErrMes={this.props.leaders.errMes}
                     />
                     {/*<!--
                         fetch update: promotion = {this.props.promotions.filter....} -> {this.props.promotions.promotions.filter....},
@@ -156,7 +161,7 @@ class Main extends Component{
                             <!--post REDUX THUNK update - Contact component will receive props; below Route invalid-->
                             <Route exact path="/contactus" component={Contact}/>
                             */}
-                            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm}/>}/>
+                            <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback}/>}/>
                             <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>}/>
                             <Redirect to="/home"/>
                         </Switch>

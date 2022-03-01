@@ -6,7 +6,7 @@ import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from 'reactstrap'
 // import { Form, FormGroup, Input, FormFeedback } from 'reactstrap';
 import {Link} from 'react-router-dom';
 //using Form instead of LocalForm
-import { Control, Form, Errors, actions } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 //import { Control, LocalForm, Errors } from 'react-redux-form';
 
 //val && val.length - val exists, has a value && val.length is not 0 = true;
@@ -80,8 +80,10 @@ class Contact extends Component{
         //alert("Current state is: " + JSON.stringify(this.state));
         //To prevent the default behaviour of opening a new browser window; 'event.preventDefault()' method is used
         //event.preventDefault();
-        console.log("Current state is: " + JSON.stringify(values));
-        alert("Current state is: " + JSON.stringify(values));
+
+        // console.log("Current state is: " + JSON.stringify(values));
+        // alert("Current state is: " + JSON.stringify(values));
+        this.props.postFeedback(values);
         //post REDUX THUNK update - below statement resets feedback form onSubmit()
         this.props.resetFeedbackForm();
     }
